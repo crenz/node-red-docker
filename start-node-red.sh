@@ -5,6 +5,14 @@ if [ "$NODERED_USER" = "" ] || [ "$NODERED_PWHASH" = "" ]; then
 else
 	echo Creating /data/settings.js
 
+	if [ "$NODERED_LOGLEVEL" = "" ]; then
+		export NODERED_LOGLEVEL=info
+	fi
+
+	if [ "$NODERED_HTTP_ROOT" = "" ]; then
+		export NODERED_HTTP_ROOT=/
+	fi
+
 	echo 'module.exports = {
 	adminAuth: {
     	type: "credentials",
@@ -13,7 +21,14 @@ else
         	password: "'"$NODERED_PWHASH"'",
         	permissions: "*"
     	}]
-    }
+  },
+	logging: {
+  		console: {
+					level: "'"$NODERED_LOGLEVEL"'"
+			}
+  },
+	httpRoot: "'"$NODERED_HTTP_ROOT"'",
+
 }' > /data/settings.js
 
 fi
